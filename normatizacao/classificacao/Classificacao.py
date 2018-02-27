@@ -1,5 +1,6 @@
 import nltk
 import csv
+import pickle
 
 class Analise (object):
     def __init__(self):
@@ -70,9 +71,9 @@ class Analise (object):
 
     def treinar(self):
         basecompletaTreino = nltk.classify.apply_features(self.extratorpalavrasTreino, self.treino)
-        basecompletaTeste = nltk.classify.apply_features(self.extratorpalavrasTreino,self.teste)
+        #basecompletaTeste = nltk.classify.apply_features(self.extratorpalavrasTreino,self.teste)
         classificador = nltk.NaiveBayesClassifier.train(basecompletaTreino)
-        print(nltk.classify.accuracy(classificador, basecompletaTeste))
+        #print(nltk.classify.accuracy(classificador, basecompletaTeste))
         return classificador
 
     def classificarProduto(self,classificador,produto):
@@ -87,6 +88,10 @@ class Analise (object):
         return classificador.classify(novoProduto)
 
     def classificar(self, produto):
-        classificador = self.treinar()
+        try:
+            classificador = pickle.load(open('normatizacao/classificacao/classificador.pkl','rb'))
+        except:
+            classificador = self.treinar()
+            pickle.dump(classificador, open('normatizacao/classificacao/classificador.pkl', 'wb'))
         produtoClassificado = self.classificarProduto(classificador,produto)
         return produtoClassificado
