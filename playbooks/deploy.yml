@@ -3,7 +3,7 @@
   tasks:
   - name: clone git repository
     git:
-      repo: https://gitlab.com/CarlosQuixada/normatizador
+      repo: https://github.com/diegothuran/normatizador
       dest: /home/trustv/normatizador
       version: "{{ version }}"
   - name: build docker image
