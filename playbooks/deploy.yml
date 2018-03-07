@@ -3,24 +3,24 @@
   tasks:
   - name: clone git repository
     git:
-      repo: https://gitlab.com/trustvox/rambo
-      dest: /home/trustv/rambo
+      repo: https://gitlab.com/CarlosQuixada/normatizador
+      dest: /home/trustv/normatizador
       version: "{{ version }}"
   - name: build docker image
-    shell: cd rambo && docker build -t trustvox/rambo:{{ version }} .
+    shell: cd normatizador && docker build -t trustvox/normatizador:{{ version }} .
   - name: register possibly running container with same name
-    shell: docker ps -a | grep rambo | wc -l
-    register: rambo_running_container
+    shell: docker ps -a | grep normatizador | wc -l
+    register: normatizador_running_container
   - name: stop possibly running container with same name
-    shell: docker rm -f rambo
-    when: rambo_running_container.stdout != "0"
+    shell: docker rm -f normatizador
+    when: normatizador_running_container.stdout != "0"
   - name: run container
     shell: >
-      docker run -e "RAMBO_ENV=production" -d
-      --name rambo
-      -p 9901:8000
-      trustvox/rambo:{{ version }}
+      docker run -e "normatizador_ENV=production" -d
+      --name normatizador
+      -p 9925:8000
+      trustvox/normatizador:{{ version }}
   - name: remove cloned git repo
     file:
-      path: /home/trustv/rambo
+      path: /home/trustv/normatizador
       state: absent
